@@ -1,101 +1,85 @@
+"use client";
+
+import S from "@/style/home.module.css";
 import Image from "next/image";
+//
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
+const buttonStyle =
+  "w-[130px] h-[40px] text-white rounded-[5px] py-2.5 px-6 bg-transparent transition-all duration-300 ease-in-out relative inline-block shadow-[inset_2px_2px_2px_0px_rgba(255,_255,_255,_0.5),_7px_7px_20px_0px_rgba(0,_0,_0,_0.1),_4px_4px_5px_0px_rgba(0,_0,_0,_0.1)] focus:outline-none relative right-[20px] bottom-[20px] border-0 shadow-none w-[130px] h-[40px] leading-[42px] perspective-[230px]";
+const spanStyle =
+  "bg-gradient-to-t  block absolute w-[130px] h-[40px] shadow-[inset_2px_2px_2px_0px_rgba(255,_255,_255,_0.5),_7px_7px_20px_0px_rgba(0,_0,_0,_0.1),_4px_4px_5px_0px_rgba(0,_0,_0,_0.1)] rounded-[5px] m-0 text-center box-border transition-all duration-300";
+const first = "from-pink-500 to-yellow-500";
+const seconde = "from-purple-500 to-yellow-500";
 
 export default function Home() {
+  const router = useRouter();
+  const [copied, setCopied] = useState(false);
+  const [randomImage, setRandomImage] = useState("");
+
+  useEffect(() => {
+    const imageArr = [
+      "/lotto_example1.png",
+      "/lotto_example2.png",
+      "/lotto_example3.png",
+      "/lotto_example4.png",
+    ];
+
+    const getRandomImage = () => {
+      return imageArr[Math.floor(Math.random() * imageArr.length)];
+    };
+
+    const imageUrl = getRandomImage();
+    setRandomImage(imageUrl);
+  }, []);
+
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy: ", err);
+    }
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+    <div className="flex flex-col justify-center items-center gap-10 px-4 py-32 ">
+      <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-500 via-yellow-500 to-purple-400 text-transparent bg-clip-text text-shadow-white">
+        내 맘대로 복권
+      </h1>
+      <div>
         <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
+          src={randomImage || "/lotto_example1.png"}
+          alt="default lotto"
           width={180}
-          height={38}
+          height={60}
           priority
         />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+      </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+      <div className="flex gap-4">
+        <button
+          className={`${buttonStyle} ${S.customButton}`}
+          onClick={copyToClipboard}
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          <span className={`${spanStyle} ${first}`}>
+            {copied ? "링크 복사 완료" : "Click!"}
+          </span>
+          <span className={`${spanStyle} ${first}`}>
+            {copied ? "링크 복사 완료" : "결과 공유하기"}
+          </span>
+        </button>
+        <button
+          className={`${buttonStyle} ${S.customButton}`}
+          onClick={() => router.push("/create")}
         >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          <span className={`${spanStyle} ${seconde}`}>Click!</span>
+          <span className={`${spanStyle} ${seconde}`}>나도 만들기</span>
+        </button>
+      </div>
     </div>
   );
 }
