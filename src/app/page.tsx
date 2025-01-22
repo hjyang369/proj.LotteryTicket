@@ -57,6 +57,7 @@ export default function Home() {
           width={180}
           height={60}
           priority
+          draggable={false}
         />
       </div>
 
